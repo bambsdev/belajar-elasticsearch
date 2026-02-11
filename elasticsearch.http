@@ -163,7 +163,7 @@ GET http://localhost:9200/products/_mapping
 
 
 ### ! create order 1
-POST http://localhost:9200/orders/_create/1
+POST http://localhost:9200/orders/_create/2
 Content-Type: application/json
 
 {
@@ -173,19 +173,14 @@ Content-Type: application/json
         {
             "product_id" : "1",
             "price" : "3000",
-            "quantity" : "2"
-        },
-        {
-            "product_id" : "2",
-            "price" : "7000",
-            "quantity" : "2"
+            "quantity" : "1"
         }
     ]
 }
 
 
 ### ! get orders mapping
-GET http://localhost:9200/orders/_mapping
+GET http://localhost:9200/products/_mapping
 
 
 ### ! get customer doc ibrohim
@@ -207,3 +202,132 @@ HEAD http://localhost:9200/customers/_doc/ibrohim
 ### ! check exists salah, pakai HEAD
 HEAD http://localhost:9200/customers/_source/salah
 
+
+
+###  MULTI GET API ###
+
+
+### ! singleIndex : get order 1 and order 2
+POST http://localhost:9200/orders/_mget
+Content-Type: application/json
+
+{
+    "ids" : [
+        "1", "2"
+    ]
+}
+
+
+### ! multiIndex : get order 1 and customer ibrohim
+POST http://localhost:9200/_mget
+Content-Type: application/json
+
+{
+    "docs" : [
+        {
+            "_id" : "1",
+            "_index" : "orders"
+        },
+        {
+            "_id" : "ibrohim",
+            "_index" : "customers"
+        },
+        {
+            "_id" : "salah",
+            "_index" : "customers"
+        }
+    ]
+}
+
+
+
+###  Search API ###
+
+
+### ! search all products
+POST http://localhost:9200/products/_search
+
+
+### ! search all products page 1
+POST http://localhost:9200/products/_search?size=1&from=0
+
+
+### ! search all products page 2
+POST http://localhost:9200/products/_search?size=1&from=1
+
+
+### ! search all products sort by pricing
+POST http://localhost:9200/products/_search?sort=price:desc
+
+
+
+###  Index API ### (dokumen sudah ada akan di replice) kalau pakai create API akan error
+
+
+
+### ! crate product 3
+POST http://localhost:9200/products/_doc/3
+Content-Type: application/json
+
+{
+    "name" : "Pop Mie Rasa Baso",
+    "price" : "2500"
+}
+
+
+### ! crate product 4
+POST http://localhost:9200/products/_doc/4
+Content-Type: application/json
+
+{
+    "name" : "Samsung Galaxy S40+",
+    "price" : "25000000"
+}
+
+
+### ! crate product 5
+POST http://localhost:9200/products/_doc/5
+Content-Type: application/json
+
+{
+    "name" : "MacBook Air M5",
+    "price" : "30000000"
+}
+
+
+### ! search all product
+POST http://localhost:9200/products/_search
+
+
+
+###  Update API ###
+
+
+
+### ! update price for product 5
+POST http://localhost:9200/products/_update/5
+Content-Type: application/json
+
+{
+    "doc" : {
+        "price" : "60000000"
+    }
+}
+
+
+
+###  Delete API ###
+
+
+### ! insert costumer spammer
+POST http://localhost:9200/customers/_doc/spammer
+Content-Type: application/json
+
+{
+    "name":"Spammer",
+    "register_at" : "2024-10-10 00:00:00"
+}
+
+
+### ! delete customer spammer
+DELETE http://localhost:9200/customers/_doc/spammer
