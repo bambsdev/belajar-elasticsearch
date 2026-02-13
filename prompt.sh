@@ -1,3 +1,3 @@
 # pakai docker :
 
-docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node"  --mount "type=bind,source=D:\belajar-elasticsearch\data,destination=/usr/share/elasticsearch/data" --mount "type=bind,source=D:\belajar-elasticsearch\config,destination=/usr/share/elasticsearch/config" elasticsearch:9.3.0
+docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node"  --mount "type=bind,source=D:\belajar-elasticsearch\data,destination=/usr/share/elasticsearch/data" --mount "type=bind,source=D:\belajar-elasticsearch\config,destination=/usr/share/elasticsearch/config" --mount "type=bind,source=D:\belajar-elasticsearch\backup,destination=/usr/share/elasticsearch/backup" elasticsearch:9.3.0
